@@ -1,25 +1,28 @@
 <template>
-  <el-container>
-    <el-header height="220px">
-      <img class="blogo" src="../assets/img/bloglogo.png"></img>
-    </el-header>
-    <el-main>
-      <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="loginlabel">
-        <el-form-item label="username" prop="username">
-          <el-input v-model="ruleForm.username"></el-input>
-        </el-form-item>
-        <el-form-item label="password" prop="password">
-          <el-input type="password" v-model="ruleForm.password"></el-input>
-        </el-form-item>
+  <div>
+    <el-container>
+      <el-header height="220px">
+        <img class="blogo" src="../assets/img/bloglogo.png"></img>
+      </el-header>
+      <el-main>
+        <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="loginlabel">
+          <el-form-item label="username" prop="username">
+            <el-input v-model="ruleForm.username"></el-input>
+          </el-form-item>
+          <el-form-item label="password" prop="password">
+            <el-input type="password" v-model="ruleForm.password"></el-input>
+          </el-form-item>
 
-        <el-form-item>
-          <el-button type="primary" @click="submitForm('ruleForm')" :loading="loginclick">LOGIN</el-button>
-          <el-button @click="resetForm('ruleForm')">RESET</el-button>
-        </el-form-item>
-      </el-form>
+          <el-form-item>
+            <el-button type="primary" @click="submitForm('ruleForm')">LOGIN</el-button>
+            <el-button @click="resetForm('ruleForm')">RESET</el-button>
+          </el-form-item>
+        </el-form>
 
-    </el-main>
-  </el-container>
+      </el-main>
+    </el-container>
+  </div>
+
 </template>
 
 <script>
@@ -27,9 +30,8 @@ export default {
   name: "Login",
   data() {
     return {
-      loginclick:false,
       ruleForm: {
-        username: 'markerhub',
+        username: 'weishenme',
         password: '111111'
       },
       rules: {
@@ -48,8 +50,7 @@ export default {
       this.$refs[formName].validate((valid) => {
         if (valid) {
           const _this = this
-          _this.loginclick = true
-          this.$axios.post('http://localhost:8081/login', this.ruleForm).then(res => {
+          this.$axios.post('/login', this.ruleForm).then(res => {
             // console.log(res.data)
             const jwt = res.headers['authorization']
             const userInfo = res.data.data
@@ -57,11 +58,10 @@ export default {
             _this.$store.commit("SET_TOKEN", jwt)
             _this.$store.commit("SET_USERINFO", userInfo)
             _this.$router.push("/blogs")
-            _this.loginclick = false
+
           })
         } else {
           console.log('error submit!!');
-
           return false;
         }
       });
@@ -69,6 +69,7 @@ export default {
     resetForm(formName) {
       this.$refs[formName].resetFields();
     }
+
   },
   mounted() {
     this.$notify({
@@ -94,7 +95,7 @@ export default {
   /*background-color: #E9EEF3;*/
   color: #333;
   text-align: center;
-  line-height: 560px;
+  line-height: 1060px;
   margin-top: 50px;
 }
 
